@@ -1,2 +1,2 @@
 # PA02
-PA02 rottenpotatoes
+Go to master branch
