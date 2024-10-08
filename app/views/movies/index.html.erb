@@ -65,42 +65,42 @@
   .movies-table th {
     background-color: #4CAF50;
     color: white;
-    cursor: pointer; /* Change cursor to pointer on hover */
+    cursor: pointer;
   }
 
   .movies-table th:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #45a049;
   }
 
   .movies-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Light gray for even rows */
+    background-color: #f9f9f9;
   }
 
   .sort-indicator {
     margin-left: 5px;
-    font-size: 0.8em; /* Smaller size for the indicator */
+    font-size: 0.8em;
   }
 
   .sort-indicator.asc::after {
-    content: "▲"; /* Ascending sort indicator */
+    content: "▲";
   }
 
   .sort-indicator.desc::after {
-    content: "▼"; /* Descending sort indicator */
+    content: "▼";
   }
 
   .movies-table td {
-    position: relative; /* Positioning for action buttons */
+    position: relative;
   }
 
   .movies-table td a {
-    margin-right: 10px; /* Space between action links */
-    text-decoration: none; /* Remove underline */
-    color: #007BFF; /* Blue color for links */
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007BFF;
   }
 
   .movies-table td a:hover {
-    text-decoration: underline; /* Underline on hover */
+    text-decoration: underline;
   }
 </style>
 
@@ -111,19 +111,16 @@
     const rows = Array.from(tbody.rows);
     const isAscending = tbody.dataset.sortDirection === "asc";
 
-    // Clear previous sort indicators
     clearSortIndicators();
 
-    // Sort rows
     rows.sort((a, b) => {
       const aText = a.cells[columnIndex].innerText;
       const bText = b.cells[columnIndex].innerText;
 
-      // Determine the type of sorting based on column
       if (columnIndex === 1) {
-        return isAscending
-          ? parseFloat(aText) - parseFloat(bText)
-          : parseFloat(bText) - parseFloat(aText);
+        const aRating = parseFloat(aText);
+        const bRating = parseFloat(bText);
+        return isAscending ? aRating - bRating : bRating - aRating;
       } else if (columnIndex === 2) {
         return isAscending
           ? new Date(aText) - new Date(bText)
@@ -135,12 +132,8 @@
       }
     });
 
-    // Clear the table body and re-add sorted rows
     rows.forEach(row => tbody.appendChild(row));
-    // Toggle sort direction
     tbody.dataset.sortDirection = isAscending ? "desc" : "asc";
-
-    // Update sort indicators
     updateSortIndicators(columnIndex, tbody.dataset.sortDirection);
   }
 
