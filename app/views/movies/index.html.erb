@@ -1,0 +1,151 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Movies" %>
+
+<h1>Movies</h1>
+
+<table id="movies-table" class="movies-table">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">Title <span class="sort-indicator" id="title-indicator"></span></th>
+      <th onclick="sortTable(1)">Rating <span class="sort-indicator" id="rating-indicator"></span></th>
+      <th onclick="sortTable(2)">Release Date <span class="sort-indicator" id="release-date-indicator"></span></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @movies.any? %>
+      <% @movies.each do |movie| %>
+        <tr>
+          <td><%= movie.title %></td>
+          <td><%= movie.rating %></td>
+          <td><%= movie.release_date.strftime("%B %d, %Y") if movie.release_date %></td>
+          <td>
+            <%= link_to "Show", movie %>
+            <%= link_to "Edit", edit_movie_path(movie) %>
+            <%= link_to "Delete", movie, method: :delete, data: { confirm: "Are you sure?" } %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">No movies available.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "New movie", new_movie_path %>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 20px;
+  }
+
+  h1 {
+    color: #333;
+    text-align: center;
+  }
+
+  .movies-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .movies-table th,
+  .movies-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .movies-table th {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+
+  .movies-table th:hover {
+    background-color: #45a049;
+  }
+
+  .movies-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .sort-indicator {
+    margin-left: 5px;
+    font-size: 0.8em;
+  }
+
+  .sort-indicator.asc::after {
+    content: "▲";
+  }
+
+  .sort-indicator.desc::after {
+    content: "▼";
+  }
+
+  .movies-table td {
+    position: relative;
+  }
+
+  .movies-table td a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007BFF;
+  }
+
+  .movies-table td a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  function sortTable(columnIndex) {
+    const table = document.getElementById("movies-table");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const isAscending = tbody.dataset.sortDirection === "asc";
+
+    clearSortIndicators();
+
+    rows.sort((a, b) => {
+      const aText = a.cells[columnIndex].innerText.trim();
+      const bText = b.cells[columnIndex].innerText.trim();
+
+      if (columnIndex === 2) {
+        return isAscending
+          ? new Date(aText) - new Date(bText)
+          : new Date(bText) - new Date(aText);
+      } else {
+        return isAscending
+          ? aText.localeCompare(bText)
+          : bText.localeCompare(aText);
+      }
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+    tbody.dataset.sortDirection = isAscending ? "desc" : "asc";
+    updateSortIndicators(columnIndex, tbody.dataset.sortDirection);
+  }
+
+  function clearSortIndicators() {
+    const indicators = document.querySelectorAll('.sort-indicator');
+    indicators.forEach(indicator => {
+      indicator.classList.remove('asc', 'desc');
+    });
+  }
+
+  function updateSortIndicators(columnIndex, direction) {
+    const indicator = document.querySelector(`#movies-table th:nth-child(${columnIndex + 1}) .sort-indicator`);
+    if (direction === "asc") {
+      indicator.classList.add('asc');
+    } else {
+      indicator.classList.add('desc');
+    }
+  }
+</script>
