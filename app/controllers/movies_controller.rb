@@ -1,13 +1,9 @@
 class MoviesController < ApplicationController
-  before_action :set_movie, only: %i[show edit update destroy]
+  before_action :set_movie, only: %i[ show edit update destroy ]
 
   # GET /movies or /movies.json
   def index
-    sort_column = params[:sort] || "title" # Default sort column
-    sort_direction = params[:direction] || "asc" # Default sort direction
-
-    # Use sanitized values to prevent SQL injection
-    @movies = Movie.order("#{sanitize_sort_column(sort_column)} #{sanitize_sort_direction(sort_direction)}")
+    @movies = Movie.all
   end
 
   # GET /movies/1 or /movies/1.json
@@ -70,16 +66,5 @@ class MoviesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def movie_params
       params.require(:movie).permit(:title, :rating, :description, :release_date)
-    end
-
-    # Helper method to sanitize the sort column
-    def sanitize_sort_column(column)
-      allowed_columns = %w[title rating release_date] # Specify allowed columns
-      allowed_columns.include?(column) ? column : "title"
-    end
-
-    # Helper method to sanitize the sort direction
-    def sanitize_sort_direction(direction)
-      %w[asc desc].include?(direction) ? direction : "asc"
     end
 end
