@@ -117,11 +117,7 @@
       const aText = a.cells[columnIndex].innerText.trim();
       const bText = b.cells[columnIndex].innerText.trim();
 
-      if (columnIndex === 1) {
-        const aRating = parseFloat(aText) || 0;
-        const bRating = parseFloat(bText) || 0;
-        return isAscending ? aRating - bRating : bRating - aRating;
-      } else if (columnIndex === 2) {
+      if (columnIndex === 2) {
         return isAscending
           ? new Date(aText) - new Date(bText)
           : new Date(bText) - new Date(aText);
