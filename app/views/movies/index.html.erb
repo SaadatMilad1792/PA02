@@ -7,9 +7,9 @@
 <table>
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Rating</th>
-      <th>Release Date</th>
+      <th><%= link_to "Title", movies_path(sort: "title", direction: toggle_sort_direction("title")) %></th>
+      <th><%= link_to "Rating", movies_path(sort: "rating", direction: toggle_sort_direction("rating")) %></th>
+      <th><%= link_to "Release Date", movies_path(sort: "release_date", direction: toggle_sort_direction("release_date")) %></th>
       <th>Actions</th>
     </tr>
   </thead>
