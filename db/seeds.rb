@@ -19,9 +19,19 @@ more_movies = [
   {:title => 'Nomadland', :rating => 'R',
     :release_date => '19-Feb-2021'},
   {:title => 'CODA', :rating => 'PG-13',
-    :release_date => '13-Aug-2021'}
+    :release_date => '13-Aug-2021'},
+
+  # 3 new movies
+  {:title => 'Kung Fu Panda 1', :rating => 'PG',
+    :release_date => '06-Jun-2008'},
+  {:title => 'Kung Fu Panda 2', :rating => 'PG',
+    :release_date => '26-May-2011'},
+  {:title => 'Kung Fu Panda 3', :rating => 'PG',
+    :release_date => '29-Jan-2016'},
 ]
 
 more_movies.each do |movie|
-  Movie.create!(movie)
+  unless Movie.exists?(title: movie[:title])
+    Movie.create!(movie)
+  end
 end
